@@ -1,9 +1,9 @@
 {
-  "name": "fast-run-tasks",
-  "displayName": "Fast Run Tasks",
+  "name": "Fast-Run-Tasks",
+  "displayName": "Fast Run Tasks(C,C++,java,Python)",
   "description": "⚡ Run Python, Java, C, C++ instantly with one keypress. Zero config, clean output, smart compilation.",
   "version": "0.0.1",
-  "publisher": "ZaydMalek",
+  "publisher": "zaydmalek",
   "author": {
     "name": "ZaidMalik"
   },
@@ -97,12 +97,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ZaydMalek/fast-run-tasks"
+    "url": "https://github.com/zaydmalek/Fast-Run-Tasks"
   },
   "bugs": {
-    "url": "https://github.com/ZaydMalek/fast-run-tasks/issues"
+    "url": "https://github.com/zaydmalek/Fast-Run-Tasks/issues"
   },
-  "homepage": "https://github.com/ZaydMalek/fast-run-tasks#readme",
+  "homepage": "https://github.com/zaydmalek/Fast-Run-Tasks#readme",
   "license": "MIT",
   "galleryBanner": {
     "color": "#1E1E1E",
