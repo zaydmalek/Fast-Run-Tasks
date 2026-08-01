@@ -7,7 +7,6 @@
 ![Version](https://img.shields.io/badge/version-0.0.1-blue?style=flat)&nbsp;
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat)&nbsp;
 ![VS Code](https://img.shields.io/badge/VS%20Code-1.80%2B-blue?style=flat)&nbsp;
-![Platform](https://img.shields.io/badge/platform-Windows-lightgrey?style=flat)&nbsp;
 
 </div>
 
