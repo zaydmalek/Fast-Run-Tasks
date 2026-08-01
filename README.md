@@ -21,7 +21,8 @@
 - ⚡ **One-Key Execution** - Single shortcut (`Shift + \``) runs your file instantly
 - 🔄 **Fresh Compilation** - Always recompiles before running to avoid stale output
 - 🖥️ **Cross-Shell Support** - Works seamlessly with both PowerShell and CMD
-
+  
+## Demo
 ![Demo](images/demo.gif)
 
 ## Why Fast Run? 🎯
