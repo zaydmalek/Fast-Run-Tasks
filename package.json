@@ -1,0 +1,111 @@
+{
+  "name": "fast-run-tasks",
+  "displayName": "Fast Run Tasks",
+  "description": "⚡ Run Python, Java, C, C++ instantly with one keypress. Zero config, clean output, smart compilation.",
+  "version": "0.0.1",
+  "publisher": "ZaydMalek",
+  "author": {
+    "name": "ZaidMalik"
+  },
+  "icon": "images/icon.ico",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "run",
+    "execute",
+    "compile",
+    "python",
+    "java",
+    "c",
+    "cpp",
+    "c++",
+    "terminal",
+    "task",
+    "runner",
+    "compiler",
+    "student",
+    "education",
+    "code runner",
+    "quick run",
+    "one click"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "quick-run.execute",
+        "title": "Fast Run: Execute Current File",
+        "category": "Fast Run"
+      }
+    ],
+    "keybindings": [
+      {
+        "key": "shift+`",
+        "command": "quick-run.execute",
+        "when": "editorTextFocus && resourceExtname =~ /\\.(py|java|c|cpp)$/"
+      }
+    ],
+    "configuration": {
+      "title": "Fast Run",
+      "properties": {
+        "fastRun.clearTerminal": {
+          "type": "boolean",
+          "default": true,
+          "description": "Clear terminal before each run"
+        },
+        "fastRun.focusTerminal": {
+          "type": "boolean",
+          "default": true,
+          "description": "Focus terminal after running"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext .ts",
+    "test": "vscode-test",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.45.0",
+    "@typescript-eslint/parser": "^8.45.0",
+    "@vscode/vsce": "^2.19.0",
+    "eslint": "^9.36.0",
+    "typescript": "^5.0.0",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ZaydMalek/fast-run-tasks"
+  },
+  "bugs": {
+    "url": "https://github.com/ZaydMalek/fast-run-tasks/issues"
+  },
+  "homepage": "https://github.com/ZaydMalek/fast-run-tasks#readme",
+  "license": "MIT",
+  "galleryBanner": {
+    "color": "#1E1E1E",
+    "theme": "dark"
+  }
+}

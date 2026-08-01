@@ -1,0 +1,9 @@
+node_modules/
+out/test/
+.vscode/
+*.vsix
+*.log
+*.tmp
+.DS_Store
+npm-debug.log*
+
