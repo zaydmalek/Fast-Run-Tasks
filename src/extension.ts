@@ -3,8 +3,6 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { exec } from 'child_process';
 
-// Cache of compilers we've already confirmed exist, so we only pay the
-// exec() cost once per compiler per VS Code session - not on every run.
 const verifiedCompilers = new Set<string>();
 
 async function ensureCompilerAvailable(command: string, installHint: string): Promise<boolean> {
@@ -24,9 +22,6 @@ async function ensureCompilerAvailable(command: string, installHint: string): Pr
     });
 }
 
-// Detects a local virtual environment's python before falling back to the
-// system python3/python. Only checks the file's own directory (no upward
-// directory walking, to avoid false positives from unrelated venvs).
 function getPythonCommand(fileDir: string, isWindows: boolean): string {
     const pythonExe = isWindows ? 'python.exe' : 'python3';
     const venvDirs = ['venv', '.venv', 'env'];
@@ -42,7 +37,18 @@ function getPythonCommand(fileDir: string, isWindows: boolean): string {
 }
 
 export function activate(context: vscode.ExtensionContext) {
-    console.log('Fast Run extension activated! 🚀');
+    // Show Welcome Message on first install, standard message on subsequent loads
+    const hasShownWelcome = context.globalState.get<boolean>('fastRun.hasShownWelcome', false);
+    if (!hasShownWelcome) {
+        vscode.window.showInformationMessage(
+            '🎉 Fast Run is installed and ready! Press Shift+` to run your code instantly.',
+            'Got it!'
+        ).then(() => {
+            context.globalState.update('fastRun.hasShownWelcome', true);
+        });
+    } else {
+        vscode.window.showInformationMessage('🚀 Fast Run activated!');
+    }
 
     const disposable = vscode.commands.registerCommand('quick-run.execute', async () => {
         try {
@@ -78,7 +84,6 @@ export function activate(context: vscode.ExtensionContext) {
 
             const isWindows = process.platform === 'win32';
             const defaultShell = vscode.workspace.getConfiguration('terminal.integrated.defaultProfile').get<string>('windows');
-            // FIX: Ensure it correctly defaults to PowerShell on Windows if undefined
             const isPowerShell = isWindows && (!defaultShell || defaultShell.toLowerCase().includes('powershell'));
             const pathSep = isWindows ? ';' : ':';
 
@@ -91,7 +96,6 @@ export function activate(context: vscode.ExtensionContext) {
                         const ok = await ensureCompilerAvailable(pythonCmd, 'Install Python and add it to PATH.');
                         if (!ok) return;
                     }
-                    // FIX: Formatted as a single execution string to avoid quote escaping issues
                     execution = new vscode.ShellExecution(`"${pythonCmd}" "${fileName}"`, { cwd: fileDir });
                     break;
                 }
@@ -113,7 +117,6 @@ export function activate(context: vscode.ExtensionContext) {
                         }
                     }
                     
-                    // FIX: Always include current dir ('.') in classpath so the main class can actually load
                     const cpFlag = classpath ? `-cp ".${pathSep}${classpath}"` : '';
 
                     const fileContent = fs.readFileSync(filePath, 'utf8');
@@ -174,7 +177,6 @@ export function activate(context: vscode.ExtensionContext) {
                     const ok = await ensureCompilerAvailable('g++', 'Install GCC/G++ (MinGW on Windows) and add it to PATH.');
                     if (!ok) return;
 
-                    // FIX: Check cpp settings first, then fallback to c settings if they don't exist
                     const includePaths = config.get<string[]>('cpp.includePaths', config.get<string[]>('c.includePaths', []));
                     const libPaths = config.get<string[]>('cpp.libPaths', config.get<string[]>('c.libPaths', []));
                     const libs = config.get<string[]>('cpp.libs', config.get<string[]>('c.libs', []));
@@ -224,6 +226,10 @@ export function activate(context: vscode.ExtensionContext) {
             task.isBackground = false;
             task.group = vscode.TaskGroup.Build;
 
+            // Display dynamic popup message before execution
+            const displayLang = languageId === 'cpp' ? 'C++' : languageId.charAt(0).toUpperCase() + languageId.slice(1);
+            vscode.window.showInformationMessage(`⚙️ Running ${displayLang} file...`);
+
             await vscode.tasks.executeTask(task);
 
         } catch (error: any) {
@@ -233,18 +239,8 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(disposable);
-
-    const hasShownWelcome = context.globalState.get<boolean>('fastRun.hasShownWelcome', false);
-    if (!hasShownWelcome) {
-        vscode.window.showInformationMessage(
-            '🚀 Fast Run is ready! Press Shift+` to run your code instantly.',
-            'Got it!'
-        ).then(() => {
-            context.globalState.update('fastRun.hasShownWelcome', true);
-        });
-    }
 }
 
 export function deactivate() {
-    console.log('Fast Run extension deactivated!');
+    vscode.window.showInformationMessage('👋 Fast Run extension deactivated!');
 }
